@@ -1,5 +1,5 @@
 let billy = (function() {
-  let text = 'Billy to Rose: Hello Rose this is Billy, I understand you and run away! Godluck!';
+  let text = 'Message > Billy to Rose: Hello Rose this is Billy, I understand you and run away! Godluck!';
 
   return {
     sendMessage: function() {
@@ -9,7 +9,7 @@ let billy = (function() {
 })();
 
 let jack = (function() {
-  let text = "Jack to Rose: Hello Rose this is Jack. let's to be together!";
+  let text = "Message > Jack to Rose: Hello Rose this is Jack. let's to be together!";
 
   return {
     sendMessage: function() {
@@ -19,7 +19,7 @@ let jack = (function() {
 })();
 
 let rose = (function() {
-  let text = 'Rose to Billy: Hello Billy I am with Jack now - Run Billy, Run!';
+  let text = 'Message > Rose to Billy: Hello Billy I am with Jack now - Run Billy, Run!';
 
   return {
     sendMessage: function() {
