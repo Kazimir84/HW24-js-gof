@@ -58,11 +58,12 @@ let billy = {
 };
 
 
-rose.initListeners();
-billy.initListeners();
-jack.initListeners();
-
-jack.notify();
+$('button').on('click', function() {
+  rose.initListeners();
+  billy.initListeners();
+  jack.initListeners();
+  jack.notify();
+});
 
 
 
