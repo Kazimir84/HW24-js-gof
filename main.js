@@ -1,54 +1,3 @@
-let $billy = (function() {
-  let $text = 'Message > Billy to Rose: Hello Rose this is Billy, I understand you and run away! Godluck!';
-
-  return {
-    $sendMessage: function() {
-      $.subscribe( 'Billy-Message', function() {        
-        console.group('PubSub Billy');
-        console.log('Billy send message > ', $text);
-        console.groupEnd();
-      })
-    }
-  }
-})();
-
-let $jack = (function() {
-  let $text = "Message > Jack to Rose: Hello Rose this is Jack. let's to be together!";
-
-  return {
-    $sendMessage: function() {
-      $.subscribe( 'Jack-Message', function() {      
-          console.group('PubSub Jack');
-          console.log('Jack send message > ', $text);
-          console.groupEnd();       
-      });
-    }
-  }
-})();
-
-let $rose = (function() {
-  let $textBilly = 'Message > Rose to Billy: Hello Billy I am with Jack now - Run Billy, Run!';
-  let $textJack = 'Message > Rose to Jack: Ok, gladly!';
-
-  return {
-    $sendMessageBilly: function() {
-      $.subscribe( 'Rose-Message-Billy', function() {        
-        console.group('PubSub Rose');
-        console.log('Rose send message > ', $textBilly);
-        console.groupEnd();
-      })
-    },
-    $sendMessageJack: function() {
-      $.subscribe( 'Rose-Message-Jack', function() {        
-        console.group('PubSub Rose');
-        console.log('Rose send message > ', $textJack);
-        console.groupEnd();
-      })
-    }
-  }
-})();
-
-// ========================Pub/Sub=====================================
 (function( $ ) {
   var o = $( {} );
 
@@ -62,13 +11,58 @@ let $rose = (function() {
       };
   });
 })( jQuery );
+// ==========================================================
 
-$('button').on('click', function() {
-  $.publish( 'Jack-Message', { results: [ {text: $jack.$sendMessage()}] } ); 
-  $.publish( 'Rose-Message-Jack', { results: [ {text: $rose.$sendMessageJack()}] } );
-  $.publish( 'Rose-Message-Billy', { results: [ {text: $rose.$sendMessageBilly()}] } );  
-  $.publish( 'Billy-Message', { results: [ {text: $billy.$sendMessage()}] } );
-});
+let rose = {
+
+  initListeners: function(){
+    $.subscribe('Jack-Rose', function(){
+      console.group('Jack to Rose')
+      console.log("Message > Jack to Rose: Hello Rose this is Jack. let's to be together!");
+      console.groupEnd();
+      $.publish('Rose-Jack');
+      $.publish('Rose-Billy');         
+    }),
+    $.subscribe('Billy-Rose', function() {
+      console.group('Billy to Rose')
+      console.log("Message > Billy to Rose: Hello Rose this is Billy, I understand you and run away! Godluck!");
+      console.groupEnd();
+    });
+  }
+};
+
+let jack = {
+  message: 'Jack-Rose',
+  notify: function(){
+    $.publish(this.message);
+  },
+  initListeners: function(){
+    $.subscribe('Rose-Jack', function(){
+      console.group('Rose to Jack');
+      console.log('Message > Rose to Jack: Ok, gladly!');
+      console.groupEnd();
+    });
+  }
+};
+
+let billy = {
+
+  initListeners: function(){
+    $.subscribe('Rose-Billy', function(){
+      console.group('Rose to Billy')
+      console.log('Message > Rose to Billy: Hello Billy I am with Jack now - Run Billy, Run!');
+      console.groupEnd();
+      $.publish('Billy-Rose');
+    });
+  }
+};
+
+
+rose.initListeners();
+billy.initListeners();
+jack.initListeners();
+
+jack.notify();
 
 
 
@@ -98,6 +92,85 @@ $('button').on('click', function() {
 
 
 
+
+
+
+
+
+
+// let $billy = (function() {
+//   let $text = 'Message > Billy to Rose: Hello Rose this is Billy, I understand you and run away! Godluck!';
+
+//   return {
+//     $sendMessage: function() {
+//       $.subscribe( 'Billy-Message', function() {        
+//         console.group('PubSub Billy');
+//         console.log('Billy send message > ', $text);
+//         console.groupEnd();
+//       })
+//     }
+//   }
+// })();
+
+// let $jack = (function() {
+//   let $text = "Message > Jack to Rose: Hello Rose this is Jack. let's to be together!";
+
+//   return {
+//     $sendMessage: function() {
+//       $.subscribe( 'Jack-Message', function() {      
+//           console.group('PubSub Jack');
+//           console.log('Jack send message > ', $text);
+//           console.groupEnd();       
+//       });
+//     }
+//   }
+// })();
+
+// let $rose = (function() {
+//   let $textBilly = 'Message > Rose to Billy: Hello Billy I am with Jack now - Run Billy, Run!';
+//   let $textJack = 'Message > Rose to Jack: Ok, gladly!';
+
+//   return {
+//     $sendMessageBilly: function() {
+//       $.subscribe( 'Rose-Message-Billy', function() {        
+//         console.group('PubSub Rose');
+//         console.log('Rose send message > ', $textBilly);
+//         console.groupEnd();
+//       })
+//     },
+//     $sendMessageJack: function() {
+//       $.subscribe( 'Rose-Message-Jack', function() {        
+//         console.group('PubSub Rose');
+//         console.log('Rose send message > ', $textJack);
+//         console.groupEnd();
+//       })
+//     }
+//   }
+// })();
+
+// ========================Pub/Sub=====================================
+// (function( $ ) {
+//   var o = $( {} );
+
+//   $.each({
+//       trigger: 'publish',
+//       on: 'subscribe',
+//       off: 'unsubscribe'
+//   }, function( key, val ) {
+//       jQuery[val] = function() {
+//         o[key].apply( o, arguments );
+//       };
+//   });
+// })( jQuery );
+
+// $('button').on('click', function() {
+//   $.publish( 'Jack-Message', { results: [ {text: $jack.$sendMessage()}] } ); 
+//   $.publish( 'Rose-Message-Jack', { results: [ {text: $rose.$sendMessageJack()}] } );
+//   $.publish( 'Rose-Message-Billy', { results: [ {text: $rose.$sendMessageBilly()}] } );  
+//   $.publish( 'Billy-Message', { results: [ {text: $billy.$sendMessage()}] } );
+// });
+
+// ================================================
 // ======================================================================================
 // let billy = (function() {
 //   let text = 'Message > Billy to Rose: Hello Rose this is Billy, I understand you and run away! Godluck!';
